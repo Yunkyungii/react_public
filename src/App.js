@@ -7,46 +7,41 @@ import AllList from "./pages/AllList";
 import GuList from "./pages/GuList";
 
 import './css/style.scss';
-
+import Item from "./pages/Item";
 
 
 const App = () => {
     const [food, setFood] = useState([]);
     const [gu, setGu] = useState([]);
 
-    const key = `nmPIjJ%2Bj0FufPiP6k4BLPlq3n%2B46QZN%2B6hgSINrrxqk3nNwnoHX2ynqX6Dlgr3xFeivGPus2vgmh6Ifx1vdu1g%3D%3D`
+    const key = `nmPIjJ%2Bj0FufPiP6k4BLPlq3n%2B46QZN%2B6hgSINrrxqk3nNwnoHX2ynqX6Dlgr3xFeivGPus2vgmh6Ifx1vdu1g%3D%3D`;
     const getData = async () => {
-        const d = await axios.get(`https://apis.data.go.kr/6260000/FoodService/getFoodKr?serviceKey=${key}&pageNo=1&numOfRows=150&resultType=json`);
+        const d = await axios.get(`https://apis.data.go.kr/6260000/FoodService/getFoodKr?serviceKey=${key}&pageNo=1&numOfRows=150&resultType=json`)
         const r = await d.data.getFoodKr.item;
         setFood(r);
-        const g = r.map(it => it.GUGUN_NM)
-        console.log(g);
+        const g = r.map(it => it.GUGUN_NM);
         const gList = [...new Set(g)];
         setGu(gList);
     }
 
-    //getData(); //계속 실행
-
     useEffect(() => {
         getData();
-    }, [])  //한번만 실행
+    }, []);
+
 
     return (
         <>
             <Header gu={gu} />
             {
                 console.log(food)
+
             }
-            {
-                console.log()
-            }
-            {/* {
-                food.map(it => <li>{it.MAIN_TITLE}</li>)
-            } */}
+
 
             <Routes>
                 <Route path="/" element={<AllList food={food} />}></Route>
                 <Route path="/:gu" element={<GuList food={food} />}></Route>
+                <Route path="/item/:item" element={<Item food={food} />}></Route>
             </Routes>
             <Footer />
         </>
